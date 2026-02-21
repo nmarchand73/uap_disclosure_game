@@ -1,6 +1,6 @@
 # SOLID, Clean Architecture & Clean Code Review
 
-Second pass over the UFO Disclosure Game codebase (API + frontend) using SOLID, Clean Architecture, and Clean Code criteria. Scope: full repo; focus on `api/src` and `frontend/src`.
+Second pass over the UAP Disclosure Game codebase (API + frontend) using SOLID, Clean Architecture, and Clean Code criteria. Scope: full repo; focus on `api/src` and `frontend/src`.
 
 ---
 

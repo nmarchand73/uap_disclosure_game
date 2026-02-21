@@ -8,7 +8,7 @@ from src.infrastructure.logging_config import configure_logging, log_requests
 configure_logging()
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="UFO Disclosure Game API", version="0.1.0")
+    app = FastAPI(title="UAP Disclosure Game API", version="0.1.0")
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],

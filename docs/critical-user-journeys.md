@@ -1,6 +1,6 @@
 # Critical User Journeys (CUJs)
 
-Identified from the UFO Disclosure Game codebase for e2e coverage. Limit 3–5; these are High-Traffic / core-action journeys.
+Identified from the UAP Disclosure Game codebase for e2e coverage. Limit 3–5; these are High-Traffic / core-action journeys.
 
 ---
 

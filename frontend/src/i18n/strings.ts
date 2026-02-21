@@ -3,7 +3,7 @@ export type Lang = "en" | "fr";
 
 export const strings: Record<Lang, Record<string, string>> = {
   en: {
-    appTitle: "UFO Disclosure Game",
+    appTitle: "UAP Disclosure Game",
     subtitle: "PC — 1920×1080",
     playerName: "Player name",
     character: "Character",
@@ -62,7 +62,7 @@ export const strings: Record<Lang, Record<string, string>> = {
     copied: "Copied!",
   },
   fr: {
-    appTitle: "UFO Disclosure Game",
+    appTitle: "UAP Disclosure Game",
     subtitle: "PC — 1920×1080",
     playerName: "Nom du joueur",
     character: "Personnage",

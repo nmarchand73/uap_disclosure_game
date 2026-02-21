@@ -1,4 +1,4 @@
-# GDD Compliance — UFO Disclosure Game
+# GDD Compliance — UAP Disclosure Game
 
 This document tracks implementation status against the **Game Design Document** (`gdd/GDD_UFO_Disclosure_Game_v2.md`). It is updated when rules or content change.
 

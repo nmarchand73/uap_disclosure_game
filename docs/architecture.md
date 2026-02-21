@@ -1,4 +1,4 @@
-# UFO Disclosure Game — Architecture (C4 + Mermaid)
+# UAP Disclosure Game — Architecture (C4 + Mermaid)
 
 Simple C4-style documentation for the system. Diagrams are in [Mermaid](https://mermaid.js.org/); they render on GitHub, GitLab, and in any Mermaid-compatible viewer.
 
@@ -13,7 +13,7 @@ flowchart LR
     subgraph users[" "]
         P[("Players\n(2–6)")]
     end
-    subgraph system["UFO Disclosure Game"]
+    subgraph system["UAP Disclosure Game"]
         direction TB
         WEB["Web App\n(React SPA)"]
         API["Game API\n(FastAPI)"]

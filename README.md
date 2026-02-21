@@ -1,20 +1,43 @@
-# UFO Disclosure Game
+# 🛸 The UAP Disclosure Game
 
-Digital board game (2–6 players): trivia + deduction, race to validate 3 Authorities (Government, Military, Scientific).  
-**Stack:** Python backend (FastAPI + Mangum), React + TypeScript + Vite frontend. Optional: Netlify deploy, Supabase persistence. **Platform:** PC (desktop browser, 1920×1080).
+> *"A board game of truth, mystery, and investigation. Step into the shoes of journalists, pilots, and investigators as you unravel real UFO cases—one clue at a time."*
+
+A **digital adaptation** of the board game where 2–6 players race to achieve **Full Disclosure**: convince the three Authorities (Government, Military, Scientific) by answering trivia on real UAP cases, moving across continents, and facing Skeptics and Debunkers. Logic meets history in a strategic, educational race.
 
 ---
 
-## How to run it locally
+## What is it?
+
+- **Real cases, real history** — Events and questions are based on documented incidents (Roswell, Nimitz/Tic-Tac, Ruwa school, Hessdalen, Grusch testimony, etc.).
+- **Disclosure Path** — Each player must earn **3 confirmation tokens** on each of the three Authorities (9 total) to win.
+- **Turn flow** — Roll the dice → move across continents → if your location matches an Event Card, spin the wheel → land on an Authority and answer trivia to gain a token, or hit an Obstacle (Skeptic/Debunker) and answer to avoid penalties.
+- **Bilingual** — Full English and French (UI and card content). Choose your language in the lobby.
+- **Play solo or with friends** — Create a game, share the Game ID, and others can join the same game in the same browser session.
+
+---
+
+## How to play (in 30 seconds)
+
+1. **Lobby** — Pick your language, create a new game (or join with a Game ID), choose your character (e.g. Journalist or Pilot) and variant.
+2. **Your turn** — Roll the dice (1–6), then move that many continents on the world map.
+3. **Event check** — If your continent matches one of your 3 Event Cards, you spin the Flying Saucer wheel.
+4. **Spinner result** — **Government / Military / Scientific**: answer a trivia question; correct → +1 token on that authority. **Obstacle**: answer a Skeptic or Debunker question or end your turn.
+5. **Win** — First player to get 3 tokens on each of the three authorities achieves Full Disclosure and wins.
+
+---
+
+## Tech stack & run locally
+
+**Stack:** Python backend (FastAPI + Mangum for Netlify), React + TypeScript + Vite frontend. Optional: Netlify deploy, Supabase persistence. **Platform:** desktop browser (e.g. 1920×1080).
 
 You need **two terminals**: one for the API, one for the frontend. The frontend proxies `/api` to the local API.
 
-### 1. Prerequisites
+### Prerequisites
 
-- **Python 3.11+** (for the API)
-- **Node.js 18+** and **npm** (for the frontend)
+- **Python 3.11+** (API)
+- **Node.js 18+** and **npm** (frontend)
 
-### 2. Backend (API)
+### 1. Backend (API)
 
 From the **project root**:
 
@@ -23,24 +46,18 @@ cd api
 pip install -r requirements.txt
 ```
 
-Start the API (still from project root, or ensure you're in the repo root when running the next command):
+Start the API:
 
 ```bash
-# From project root (e.g. C:\DATA\DEV\PROJETS\uap_disclosure_game)
+# From project root
 python api/run_local.py
 ```
 
-Leave this running. You should see something like:
+API runs at **http://127.0.0.1:9999**. Optional: **http://127.0.0.1:9999/docs** for Swagger UI.
 
-```
-INFO:     Uvicorn running on http://127.0.0.1:9999
-```
+### 2. Frontend
 
-The API serves on **http://127.0.0.1:9999**. Optional: open **http://127.0.0.1:9999/docs** for Swagger UI.
-
-### 3. Frontend
-
-Open a **second terminal**, from the project root:
+In a **second terminal**, from the project root:
 
 ```bash
 cd frontend
@@ -48,92 +65,52 @@ npm install
 npm run dev
 ```
 
-Leave this running. You should see:
-
-```
-  VITE v5.x.x  ready in xxx ms
-  ➜  Local:   http://localhost:5173/
-```
-
-### 4. Play
-
 Open **http://localhost:5173** in your browser.
 
-- Choose **English** or **Français** in the lobby.
-- **New game (Solo)** creates a game and puts you in. Share the **Game ID** if you want others to join.
-- **Join game**: paste the Game ID and click Join.
-- In game: **Roll dice & move** → land on a continent → if you have a matching event card, **Spin** → answer trivia or skeptic/debunker questions. First to 3 tokens in each authority wins.
-
-**Important:** The frontend expects the API at `http://127.0.0.1:9999`. Start the API (step 2) before or at the same time as the frontend (step 3).
+**Important:** Start the API (step 1) before or together with the frontend. The frontend expects the API at `http://127.0.0.1:9999`.
 
 ---
 
-## Running tests
+## Tests
 
-From the **project root**, with the `api` folder on `PYTHONPATH`:
-
-**PowerShell:**
+**Backend (pytest)** — From project root:
 
 ```powershell
+# PowerShell
 $env:PYTHONPATH = "api"
 pytest api/tests -v
 ```
 
-**Bash / Linux / macOS:**
-
 ```bash
+# Bash / Linux / macOS
 PYTHONPATH=api pytest api/tests -v
 ```
 
-All tests should pass (domain rules, game action helpers, integration).
-
----
-
-## E2E (Playwright) tests
-
-Critical User Journey (CUJ) tests live in `frontend/e2e/` and use [Playwright](https://playwright.dev/). They cover: **create game**, **join game**, and **play one turn (roll dice & move)**.
-
-**Prerequisites:** API and frontend must be running (see [How to run it locally](#how-to-run-it-locally)). E2e tests run with one worker so create, join, and move hit the same API process; use a single local API (e.g. `python api/run_local.py`), not a serverless deployment with per-request in-memory state.
-
-From the **frontend** folder:
+**E2E (Playwright)** — Create game, join game, play one turn. API and frontend must be running. From `frontend/`:
 
 ```bash
-cd frontend
 npm install
 npx playwright install chromium   # first time only
 npm run test:e2e
 ```
 
-Optional: `npm run test:e2e:ui` for the Playwright UI. Set `PLAYWRIGHT_BASE_URL` (default `http://localhost:5173`) or `PLAYWRIGHT_API_URL` (default `http://127.0.0.1:9999`) if your URLs differ.
+Optional: `npm run test:e2e:ui`. See `docs/critical-user-journeys.md` for CUJ details.
 
 ---
 
-## Logging
+## Deploy (Netlify)
 
-- **Backend:** Python `logging` is configured at startup. Each HTTP request is logged (method, path, status, duration). Game events (create, join, action) are logged with `game_id` and phase. Set `LOG_LEVEL` to `DEBUG`, `INFO` (default), `WARN`, or `ERROR`.
-- **Frontend:** Browser logger in `src/utils/logger.ts` with namespaces (`api`, `lobby`, `game`). In dev, default level is `debug`; in production, `info`. Set `VITE_LOG_LEVEL=debug` (or `info`/`warn`/`error`) in `.env` to override.
+1. Connect the repo to Netlify.
+2. **Build:** `cd frontend && npm ci && npm run build`
+3. **Publish:** `frontend/dist`
+4. **Functions:** `api` (Netlify uses `api/requirements.txt`).
+5. **Optional env:** `SUPABASE_URL`, `SUPABASE_KEY` for persistent game state; `VITE_API_URL` if API is on another domain.
 
----
+Redirects in `netlify.toml`: `/api/*` → serverless function, `/*` → SPA.
 
-## Deploy to Netlify
+**Supabase persistence** — Without it, games are in-memory (lost on cold start). Create a Supabase project and set `SUPABASE_URL` and `SUPABASE_KEY` in Netlify. The table definition is shown below.
 
-1. Connect this repo to Netlify.
-2. **Build command:** `cd frontend && npm ci && npm run build`
-3. **Publish directory:** `frontend/dist`
-4. **Functions directory:** `api` (Netlify uses `api/requirements.txt` for the Python runtime).
-5. **Environment variables** (optional):
-   - `SUPABASE_URL`, `SUPABASE_KEY` (or `SUPABASE_SERVICE_KEY`) — if set, game state is stored in Supabase instead of in-memory.
-   - `VITE_API_URL` — leave empty for same-origin; the app is served from the same domain and `/api` is redirected to the function.
-
-Redirects are in `netlify.toml`: `/api/*` → serverless function, `/*` → `index.html` (SPA).
-
-### Optional: Supabase persistence
-
-Without Supabase, game state is **in-memory** (lost when the function cold-starts or restarts). To persist games:
-
-1. Create a Supabase project and get the project URL and service (or anon) key.
-2. In Netlify, set `SUPABASE_URL` and `SUPABASE_KEY` (or `SUPABASE_SERVICE_KEY`).
-3. In the Supabase SQL editor, run:
+Example `games` table for Supabase:
 
 ```sql
 create table if not exists games (
@@ -143,20 +120,7 @@ create table if not exists games (
 );
 ```
 
-Enable RLS if you need it; the server uses the service key for backend access.
-
----
-
-## Full stack with Netlify CLI (optional)
-
-To run the full Netlify setup locally (frontend + serverless functions + redirects):
-
-```bash
-npm install -g netlify-cli
-netlify dev
-```
-
-This starts the frontend and the API as a Netlify function; no need to run `python api/run_local.py` separately.
+**Local full stack:** `netlify dev` runs frontend + API as a Netlify function.
 
 ---
 
@@ -164,13 +128,17 @@ This starts the frontend and the API as a Netlify function; no need to run `pyth
 
 | Path | Description |
 |------|-------------|
-| `api/` | Python backend: FastAPI app, Mangum for Netlify. Clean Architecture: domain, application (ports + use cases), infrastructure (routes, persistence). |
-| `api/data/` | JSON card content: events, trivia, characters, continents, skeptic, debunker. French in `api/data/fr/`. |
-| `api/run_local.py` | Runs the API with uvicorn on port 9999 (for local dev). |
-| `frontend/` | Vite + React + TypeScript SPA: lobby, game screen, i18n (EN/FR). |
-| `gdd/` | Game design document. |
-| `netlify.toml` | Build, publish dir, functions dir, redirects. |
+| `api/` | Python backend: FastAPI, Clean Architecture (domain, use cases, infrastructure). |
+| `api/data/` | JSON content: events, trivia, characters, continents, skeptic, debunker. French in `api/data/fr/`. |
+| `api/run_local.py` | Run API with uvicorn on port 9999. |
+| `frontend/` | Vite + React + TypeScript: lobby, game screen, i18n (EN/FR). |
+| `gdd/` | Game design document (full rules, lore, content). |
+| `docs/` | Architecture, critical user journeys, GDD compliance. |
 
-**i18n:** Game language is set when creating a game (`lang`: `"en"` or `"fr"` in the create-game body). UI and card content follow that language. The lobby has a language switcher; the choice is stored in `localStorage` (`uap_lang`).
+**i18n:** Game language is set when creating a game (`lang`: `"en"` or `"fr"`). UI and cards follow that language. Lobby language is stored in `localStorage` (`uap_lang`).
 
-**API docs:** When the API is running locally, open **http://127.0.0.1:9999/docs** for interactive Swagger UI.
+---
+
+## Credits & design
+
+Game design based on **The UFO Disclosure Game** (Kenneth Media LTD, 2025)—a board game of truth, mystery, and investigation. This repo is an independent digital adaptation. Full design and content notes: `gdd/GDD_UFO_Disclosure_Game_v2.md` and `docs/gdd-compliance.md`.
