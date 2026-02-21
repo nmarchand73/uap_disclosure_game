@@ -1,0 +1,8 @@
+[
+  {"id": "north_america", "name": "North America", "hotspots": ["zone_51", "roswell"]},
+  {"id": "europe", "name": "Europe", "hotspots": ["rendlesham", "hessdalen"]},
+  {"id": "south_america", "name": "South America", "hotspots": []},
+  {"id": "africa", "name": "Africa", "hotspots": ["ruwa"]},
+  {"id": "asia", "name": "Asia", "hotspots": ["jal_1628"]},
+  {"id": "oceania", "name": "Oceania", "hotspots": ["kaikoura"]}
+]

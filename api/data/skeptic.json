@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SK01",
+    "question": "Which atmospheric phenomenon can create slow-moving lights at night that witnesses sometimes mistake for UAP?",
+    "answers": [
+      {"text": "Ball lightning", "correct": false},
+      {"text": "Plasma balls (e.g. Hessdalen)", "correct": true},
+      {"text": "Aurora borealis", "correct": false},
+      {"text": "Satellite flare", "correct": false}
+    ],
+    "context": "Natural plasma phenomena can resemble structured craft to the untrained eye.",
+    "fail_effect": "skip_turn"
+  },
+  {
+    "id": "SK02",
+    "question": "Radar returns at high altitude can be distorted by what atmospheric effect?",
+    "answers": [
+      {"text": "Solar interference", "correct": false},
+      {"text": "Refraction (lobing / ducting)", "correct": true},
+      {"text": "AEGIS system overload", "correct": false},
+      {"text": "Doppler shift only", "correct": false}
+    ],
+    "context": "Atmospheric refraction can create false or duplicate returns.",
+    "fail_effect": "skip_turn"
+  }
+]

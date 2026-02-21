@@ -1,0 +1,21 @@
+[build]
+  command = "cd frontend && npm ci && npm run build"
+  publish = "frontend/dist"
+  functions = "api"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# API requests go to the Python function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/netlify_api"
+  status = 200
+  force = true
+
+# SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

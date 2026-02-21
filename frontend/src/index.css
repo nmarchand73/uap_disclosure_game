@@ -1,0 +1,77 @@
+/* GDD §16.1: palette and typography */
+:root {
+  --bg-main: #0A0A1A;
+  --accent-primary: #00FFAA;
+  --accent-secondary: #7B2FBE;
+  --text-main: #E8E8FF;
+  --text-muted: #9898B0;
+  --danger: #FF4444;
+  --success: #44FF88;
+  --focus-ring: var(--accent-primary);
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: "Inter", system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Focus and hover for accessibility and feedback */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+button:hover:not(:disabled),
+input:hover,
+select:hover {
+  filter: brightness(1.08);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--accent-secondary);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}

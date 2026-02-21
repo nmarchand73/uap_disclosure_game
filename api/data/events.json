@@ -1,0 +1,6 @@
+[
+  {"id":"E01","title":"Roswell Crash (1947)","year":1947,"continent":"north_america","authority":"government","level":1,"description":"Recovery of debris and alleged non-human craft in New Mexico.","image":"","linked_trivia":["T001","T002"],"linked_deduction":[]},
+  {"id":"E11","title":"Ruwa School (1994)","year":1994,"continent":"africa","authority":"scientific","level":2,"description":"Schoolchildren in Zimbabwe report a craft and beings.","image":"","linked_trivia":["T021"],"linked_deduction":[]},
+  {"id":"E13","title":"Incident Nimitz / Tic-Tac","year":2004,"continent":"north_america","authority":"military","level":3,"description":"F/A-18 pilots from USS Nimitz intercept elliptical object with impossible kinematics.","image":"","linked_trivia":["T012","T013"],"linked_deduction":[]},
+  {"id":"E20","title":"Hessdalen Lights","year":1981,"continent":"europe","authority":"scientific","level":3,"description":"Recurring unexplained lights in Norway studied by scientists.","image":"","linked_trivia":["T020"],"linked_deduction":[]}
+]

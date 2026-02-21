@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+__pycache__/
+api/__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Build
+frontend/dist/
+.netlify/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Playwright
+playwright-report/
+frontend/playwright-report/
+test-results/
+frontend/test-results/
+.blob*
+playwright/.cache/
+
+# Python testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+*.egg-info/
+*.egg
+
+# Optional
+*.local

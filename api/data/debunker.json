@@ -1,0 +1,26 @@
+[
+  {
+    "id": "DB01",
+    "question": "What common misidentification is often cited for triangular craft at night?",
+    "answers": [
+      {"text": "Stealth bomber (B-2)", "correct": true},
+      {"text": "Fighter jet formation", "correct": false},
+      {"text": "Satellite re-entry", "correct": false},
+      {"text": "Drone swarm", "correct": false}
+    ],
+    "context": "Conventional aircraft with running lights can appear triangular from certain angles.",
+    "fail_effect": "no_token"
+  },
+  {
+    "id": "DB02",
+    "question": "Which sensor artifact can produce a 'tic-tac' style track on radar?",
+    "answers": [
+      {"text": "Multiple reflection (multipath)", "correct": true},
+      {"text": "Stealth coating failure", "correct": false},
+      {"text": "Electronic countermeasures", "correct": false},
+      {"text": "Doppler notch", "correct": false}
+    ],
+    "context": "Radar multipath and clutter can create apparent high-speed maneuvers.",
+    "fail_effect": "no_token"
+  }
+]
