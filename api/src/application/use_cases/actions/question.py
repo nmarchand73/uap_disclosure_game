@@ -14,9 +14,12 @@ def get_pending_question(
         return None
     is_skeptic = game.turn_state.get("is_skeptic") is True
     obstacle_type = game.turn_state.get("obstacle_type", "skeptic")
+    is_deduction = game.turn_state.get("is_deduction") is True
     lang = normalize_lang(game)
     if is_skeptic:
         t = card_repo.get_debunker(qid, lang=lang) if obstacle_type == "debunker" else card_repo.get_skeptic(qid, lang=lang)
+    elif is_deduction:
+        t = card_repo.get_deduction(qid, lang=lang)
     else:
         t = card_repo.get_trivia(qid, lang=lang)
     if not t:

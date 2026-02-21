@@ -38,7 +38,7 @@ export const api = {
   getEvents: (lang = "en") => request<unknown[]>("/api/cards/events?lang=" + lang),
   getCharacters: (lang = "en") => request<unknown[]>("/api/cards/characters?lang=" + lang),
   getContinents: (lang = "en") => request<unknown[]>("/api/cards/continents?lang=" + lang),
-  createGame: (body: { player_name: string; character_id: string; character_variant: string; lang?: string }) =>
+  createGame: (body: { player_name: string; character_id: string; character_variant: string; mode?: string; lang?: string }) =>
     request<GameState>("/api/games", { method: "POST", body: JSON.stringify(body) }),
   joinGame: (gameId: string, body: { player_name: string; character_id: string; character_variant: string }) =>
     request<GameState>(`/api/games/${gameId}/join`, { method: "POST", body: JSON.stringify(body) }),
@@ -52,6 +52,9 @@ export const api = {
 export interface GameState {
   id: string;
   preferred_lang?: string;
+  mode?: string;
+  won?: boolean;
+  shared_path?: { government: number; military: number; scientific: number };
   players: Array<{
     id: string;
     name: string;
@@ -59,6 +62,7 @@ export interface GameState {
     continent: string;
     disclosure_path: { government: number; military: number; scientific: number };
     event_card_ids: string[];
+    skill_used?: boolean;
   }>;
   current_turn_index: number;
   phase: string;

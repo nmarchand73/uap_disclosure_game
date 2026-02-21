@@ -49,6 +49,13 @@ class Player:
     disclosure_path: DisclosurePath
     event_card_ids: list[str] = field(default_factory=list)
     skill_used: bool = False
+    # GDD 8.4 / 8.5: obstacle penalties
+    skip_next_turn: bool = False
+    movement_penalty: int = 0
+    # GDD 5.2: wrong authority on spinner → bonus mineur (+1 move next turn)
+    next_move_bonus: int = 0
+    # GDD 7.1: hotspots used this game (zone51_roswell, rendlesham, ruwa, hessdalen)
+    hotspot_used: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -60,6 +67,10 @@ class Player:
             "disclosure_path": self.disclosure_path.to_dict(),
             "event_card_ids": self.event_card_ids,
             "skill_used": self.skill_used,
+            "skip_next_turn": self.skip_next_turn,
+            "movement_penalty": self.movement_penalty,
+            "next_move_bonus": self.next_move_bonus,
+            "hotspot_used": list(self.hotspot_used),
         }
 
     @classmethod
@@ -73,6 +84,10 @@ class Player:
             disclosure_path=DisclosurePath.from_dict(d.get("disclosure_path", {})),
             event_card_ids=list(d.get("event_card_ids", [])),
             skill_used=d.get("skill_used", False),
+            skip_next_turn=d.get("skip_next_turn", False),
+            movement_penalty=int(d.get("movement_penalty", 0)),
+            next_move_bonus=int(d.get("next_move_bonus", 0)),
+            hotspot_used=list(d.get("hotspot_used", [])),
         )
 
 
@@ -89,6 +104,7 @@ class Game:
     created_at: str = ""
     updated_at: str = ""
     preferred_lang: str = "en"
+    mode: str = "solo"  # "solo" | "coop" (GDD 6.2: shared path win)
     # Turn state: spinner_result, pending_question_id, pending_authority (for question flow)
     turn_state: dict = field(default_factory=dict)
 
@@ -104,6 +120,7 @@ class Game:
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "preferred_lang": self.preferred_lang,
+            "mode": self.mode,
             "turn_state": self.turn_state,
         }
 
@@ -125,5 +142,6 @@ class Game:
             created_at=d.get("created_at", ""),
             updated_at=d.get("updated_at", ""),
             preferred_lang=d.get("preferred_lang", "en"),
+            mode=d.get("mode", "solo"),
             turn_state=dict(d.get("turn_state", {})),
         )

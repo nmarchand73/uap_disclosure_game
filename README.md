@@ -94,7 +94,7 @@ npx playwright install chromium   # first time only
 npm run test:e2e
 ```
 
-Optional: `npm run test:e2e:ui`. See `docs/critical-user-journeys.md` for CUJ details.
+Optional: `npm run test:e2e:ui`. Run only Critical User Journey tests: `npx playwright test --grep @cuj`. See `docs/critical-user-journeys.md` for CUJ details and Mermaid diagrams.
 
 ---
 

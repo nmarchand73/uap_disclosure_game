@@ -45,15 +45,30 @@ const styles = {
   },
 };
 
+const CHARACTER_IDS = ["journalist", "pilot", "investigator", "experiencer", "abductee", "police_officer"] as const;
+const CHARACTER_VARIANTS: Record<string, string[]> = {
+  journalist: ["investigation", "terrain"],
+  pilot: ["military", "civil"],
+  investigator: ["mufon", "ex_agent"],
+  experiencer: ["visual", "contact"],
+  abductee: ["classic", "modern"],
+  police_officer: ["rural", "urban"],
+};
+
 export default function Lobby() {
   const { lang, setLang, t } = useLanguage();
   const [playerName, setPlayerName] = useState("Player");
   const [characterId, setCharacterId] = useState("journalist");
+  const [characterVariant, setCharacterVariant] = useState("investigation");
+  const [mode, setMode] = useState<"solo" | "coop">("solo");
   const [gameIdToJoin, setGameIdToJoin] = useState("");
   const [loading, setLoading] = useState(false);
   const [joinLoading, setJoinLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const variants = CHARACTER_VARIANTS[characterId] ?? ["investigation"];
+  const effectiveVariant = variants.includes(characterVariant) ? characterVariant : variants[0];
 
   const handleNewGame = async () => {
     setLoading(true);
@@ -62,7 +77,8 @@ export default function Lobby() {
       const game = await api.createGame({
         player_name: playerName,
         character_id: characterId,
-        character_variant: "investigation",
+        character_variant: effectiveVariant,
+        mode,
         lang,
       });
       log.info("Game created", { game_id: game.id, lang });
@@ -88,7 +104,7 @@ export default function Lobby() {
       const game = await api.joinGame(id, {
         player_name: playerName,
         character_id: characterId,
-        character_variant: "investigation",
+        character_variant: effectiveVariant,
       });
       log.info("Joined game", { game_id: id, player_index: game.players.length - 1 });
       sessionStorage.setItem(`uap_player_${id}`, String(game.players.length - 1));
@@ -163,12 +179,45 @@ export default function Lobby() {
         <select
           id="character"
           value={characterId}
-          onChange={(e) => setCharacterId(e.target.value)}
+          onChange={(e) => {
+            const id = e.target.value;
+            setCharacterId(id);
+            const v = CHARACTER_VARIANTS[id] ?? ["investigation"];
+            setCharacterVariant(v[0]);
+          }}
           style={styles.input}
           aria-label={t("character")}
         >
-          <option value="journalist">{t("journalist")}</option>
-          <option value="pilot">{t("pilot")}</option>
+          {CHARACTER_IDS.map((id) => (
+            <option key={id} value={id}>{t(id)}</option>
+          ))}
+        </select>
+        <label style={{ ...styles.label, marginTop: "0.75rem" }} htmlFor="variant">
+          {t("variant")}
+        </label>
+        <select
+          id="variant"
+          value={effectiveVariant}
+          onChange={(e) => setCharacterVariant(e.target.value)}
+          style={styles.input}
+          aria-label={t("variant")}
+        >
+          {variants.map((v) => (
+            <option key={v} value={v}>{t("variant_" + v)}</option>
+          ))}
+        </select>
+        <label style={{ ...styles.label, marginTop: "0.75rem" }} htmlFor="mode">
+          {t("mode")}
+        </label>
+        <select
+          id="mode"
+          value={mode}
+          onChange={(e) => setMode(e.target.value as "solo" | "coop")}
+          style={styles.input}
+          aria-label={t("mode")}
+        >
+          <option value="solo">{t("modeSolo")}</option>
+          <option value="coop">{t("modeCoop")}</option>
         </select>
       </div>
 

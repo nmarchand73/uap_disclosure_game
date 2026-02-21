@@ -1,16 +1,8 @@
 [
-  {
-    "id": "journalist",
-    "name": "Journalist",
-    "variants": ["investigation", "terrain"],
-    "attributes": {"government": 3, "military": 2, "scientific": 2, "mobility": 4, "resistance": 3},
-    "starting_continents": ["europe", "north_america"]
-  },
-  {
-    "id": "pilot",
-    "name": "Pilot",
-    "variants": ["military", "civil"],
-    "attributes": {"government": 2, "military": 5, "scientific": 2, "mobility": 4, "resistance": 3},
-    "starting_continents": ["north_america"]
-  }
+  {"id":"journalist","name":"Journalist","variants":["investigation","terrain"],"attributes":{"government":3,"military":2,"scientific":2,"mobility":4,"resistance":3},"starting_continents":["europe","north_america"]},
+  {"id":"pilot","name":"Pilot","variants":["military","civil"],"attributes":{"government":2,"military":5,"scientific":2,"mobility":4,"resistance":3},"starting_continents":["north_america"]},
+  {"id":"investigator","name":"Investigator","variants":["mufon","ex_agent"],"attributes":{"government":2,"military":2,"scientific":3,"mobility":2,"resistance":4},"starting_continents":["north_america"]},
+  {"id":"experiencer","name":"Experiencer","variants":["visual","contact"],"attributes":{"government":2,"military":1,"scientific":3,"mobility":2,"resistance":2},"starting_continents":["north_america"]},
+  {"id":"abductee","name":"Abductee","variants":["classic","modern"],"attributes":{"government":1,"military":1,"scientific":4,"mobility":2,"resistance":2},"starting_continents":["north_america","europe"]},
+  {"id":"police_officer","name":"Police Officer","variants":["rural","urban"],"attributes":{"government":5,"military":3,"scientific":1,"mobility":2,"resistance":4},"starting_continents":["north_america","europe"]}
 ]

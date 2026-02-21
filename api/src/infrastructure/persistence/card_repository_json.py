@@ -100,3 +100,16 @@ class CardRepositoryJson(ICardRepository):
             if d.get("id") == debunker_id:
                 return d
         return None
+
+    def list_deduction(self, lang: str = "en", authority: str | None = None) -> list[dict[str, Any]]:
+        raw = _load_json("deduction", lang)
+        out = [{"id": d.get("id"), "question": d.get("question"), "answers": d.get("answers", []), "authority": d.get("authority", ""), "context": d.get("context", "")} for d in raw]
+        if authority:
+            out = [x for x in out if x.get("authority") == authority]
+        return out
+
+    def get_deduction(self, deduction_id: str, lang: str = "en") -> dict[str, Any] | None:
+        for d in self.list_deduction(lang=lang):
+            if d.get("id") == deduction_id:
+                return d
+        return None

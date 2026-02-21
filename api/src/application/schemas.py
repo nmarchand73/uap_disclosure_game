@@ -25,6 +25,6 @@ class JoinGameBody(BaseModel):
 class GameActionBody(BaseModel):
     """Body for POST /api/games/{game_id}/action."""
 
-    action: Literal["move", "spin", "submit_answer"] = Field(..., description="Action to perform")
+    action: Literal["move", "spin", "submit_answer", "use_skill"] = Field(..., description="Action to perform")
     seed: int | None = Field(default=None, description="Optional RNG seed (for tests)")
     answer_index: int = Field(default=0, ge=0, description="Answer index (for submit_answer)")

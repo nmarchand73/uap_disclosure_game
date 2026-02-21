@@ -39,10 +39,12 @@ def create_game(
     events = card_repo.list_events(lang=lang)
     event_ids = [e["id"] for e in events] if events else []
     trivia_ids = [t["id"] for t in card_repo.list_trivia(lang=lang)] if card_repo.list_trivia(lang=lang) else []
+    deduction_ids = [d["id"] for d in card_repo.list_deduction(lang=lang)] if card_repo.list_deduction(lang=lang) else []
 
     random.shuffle(event_ids)
     player_event_ids = event_ids[:3] if len(event_ids) >= 3 else event_ids.copy()
     random.shuffle(trivia_ids)
+    random.shuffle(deduction_ids)
 
     start_continent = _starting_continent_for_character(card_repo, character_id, lang)
     player = Player(
@@ -62,10 +64,11 @@ def create_game(
         phase=TurnPhase.LOBBY,
         deck_event_ids=event_ids,
         deck_trivia_ids=trivia_ids,
-        deck_deduction_ids=[],
+        deck_deduction_ids=deduction_ids,
         created_at=now,
         updated_at=now,
         preferred_lang=lang,
+        mode=mode,
     )
 
     game_repo.create(game)

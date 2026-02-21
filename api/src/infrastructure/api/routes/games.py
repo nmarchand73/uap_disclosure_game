@@ -12,6 +12,7 @@ from src.application.use_cases.game_action import (
     perform_move,
     spin_spinner,
     submit_answer,
+    use_skill,
     get_pending_question,
 )
 from src.application.dto import game_to_public_dto
@@ -122,10 +123,20 @@ def _handle_submit_answer(
     return submit_answer(game_repo, card_repo, game_id, body.answer_index)
 
 
+def _handle_use_skill(
+    game_repo: IGameRepository,
+    card_repo: ICardRepository,
+    game_id: str,
+    body: GameActionBody,
+) -> Game | None:
+    return use_skill(game_repo, game_id)
+
+
 ACTION_HANDLERS: dict[str, Callable[..., Game | None]] = {
     "move": _handle_move,
     "spin": _handle_spin,
     "submit_answer": _handle_submit_answer,
+    "use_skill": _handle_use_skill,
 }
 
 

@@ -43,3 +43,11 @@ class ICardRepository(ABC):
     @abstractmethod
     def get_debunker(self, debunker_id: str, lang: str = "en") -> dict[str, Any] | None:
         ...
+
+    @abstractmethod
+    def list_deduction(self, lang: str = "en", authority: str | None = None) -> list[dict[str, Any]]:
+        ...
+
+    @abstractmethod
+    def get_deduction(self, deduction_id: str, lang: str = "en") -> dict[str, Any] | None:
+        ...

@@ -1,5 +1,6 @@
 /**
  * CUJ 3: Complete one turn (roll dice and move).
+ * Doc: docs/critical-user-journeys.md
  * User: Player in an existing game (their turn).
  * Goal: Roll dice and move so I can advance on the board.
  * MOTs: Move action succeeds; phase and turn_state update in UI.
@@ -7,7 +8,7 @@
  */
 import { test, expect } from "@playwright/test";
 
-test.describe("CUJ: Play one turn (roll dice & move)", () => {
+test.describe("CUJ: Play one turn (roll dice & move)", { tag: "@cuj" }, () => {
   test("player can roll dice and see phase update", async ({ page }) => {
     await page.goto("/");
     await page.getByTestId("lobby-new-game").click();
@@ -23,9 +24,9 @@ test.describe("CUJ: Play one turn (roll dice & move)", () => {
     const res = await actionResponse;
     expect(res.status(), "Move action should succeed (API must be running)").toBe(200);
 
+    // MOT: phase and turn state update; no error
     await expect(page.getByTestId("game-phase")).toContainText(/spinner|end_turn/i, { timeout: 10000 });
-    const errorEl = page.getByTestId("game-error");
-    await expect(errorEl).not.toBeVisible();
+    await expect(page.getByTestId("game-error")).not.toBeVisible();
     await expect(
       page.getByText(/Dice:|No event card matches|Spinner:|Government|Military|Scientific/i)
     ).toBeVisible({ timeout: 5000 });

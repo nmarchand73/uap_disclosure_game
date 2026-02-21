@@ -121,9 +121,13 @@ export default function Game() {
   const myIndex = gameId ? parseInt(sessionStorage.getItem(`uap_player_${gameId}`) ?? "0", 10) : 0;
   const currentPlayer = game.players[game.current_turn_index] ?? game.players[0];
   const isMyTurn = game.current_turn_index === myIndex;
-  const path = (game.players[myIndex] ?? game.players[0])?.disclosure_path ?? { government: 0, military: 0, scientific: 0 };
-  const won =
-    path.government >= 3 && path.military >= 3 && path.scientific >= 3;
+  const isCoop = game.mode === "coop";
+  const path = isCoop && game.shared_path
+    ? game.shared_path
+    : (game.players[myIndex] ?? game.players[0])?.disclosure_path ?? { government: 0, military: 0, scientific: 0 };
+  const won = game.won ?? (path.government >= 3 && path.military >= 3 && path.scientific >= 3);
+  const currentPlayerData = game.players[game.current_turn_index] ?? game.players[0];
+  const canUseSkill = isMyTurn && !currentPlayerData?.skill_used && (game.phase === "movement" || game.phase === "spinner" || game.phase === "end_turn");
 
   const ts = game.turn_state ?? {};
   const spinnerLabel = ts.spinner_result ? t(spinnerLabelKey(ts.spinner_result)) : null;
@@ -173,13 +177,26 @@ export default function Game() {
         </p>
       )}
       <p style={{ color: "var(--text-main)", marginBottom: "0.5rem" }}>
-        {t("you")}: {game.players[myIndex]?.name ?? currentPlayer?.name} — {game.players[myIndex]?.character_id ?? currentPlayer?.character_id} · {t("continent")}: {continentName(lang, (game.players[myIndex] ?? currentPlayer)?.continent ?? "")}
+        {t("you")}: {game.players[myIndex]?.name ?? currentPlayer?.name} — {game.players[myIndex]?.character_id ?? currentPlayer?.character_id}
+      </p>
+      <p style={{ color: "var(--accent-primary)", fontWeight: 600, marginBottom: "0.5rem" }}>
+        {t("position")}: {continentName(lang, (game.players[myIndex] ?? currentPlayer)?.continent ?? "")}
       </p>
       {ts.dice_roll != null && (
-        <p style={{ color: "var(--accent-secondary)", marginBottom: "0.25rem" }}>Dice: {ts.dice_roll}</p>
+        <p style={{ color: "var(--success)", fontWeight: 600, marginBottom: "0.25rem" }}>
+          {t("youMovedTo")} {continentName(lang, (game.players[game.current_turn_index] ?? game.players[0])?.continent ?? "")} ({ts.dice_roll}{ts.steps != null && ts.steps !== ts.dice_roll ? ` → ${ts.steps} ${t("steps")}` : ""})
+        </p>
+      )}
+      {ts.skipped_turn && (
+        <p style={{ color: "var(--accent-secondary)", marginBottom: "0.25rem" }}>{t("turnSkipped")}</p>
       )}
       {ts.no_event_match && (
-        <p style={{ color: "var(--accent-secondary)", marginBottom: "0.25rem" }}>{t("noEventMatch")}</p>
+        <p style={{ color: "var(--accent-secondary)", marginBottom: "0.25rem" }}>{t("noEventMatch")}{ts.drew_event ? ` ${t("drewEventCard")}` : ""}</p>
+      )}
+      {ts.special && (
+        <p style={{ color: "var(--accent-primary)", marginBottom: "0.25rem" }}>
+          {t(ts.special === "whistleblower" ? "specialWhistleblower" : ts.special === "mib" ? "specialMIB" : ts.special === "hoax" ? "specialHoax" : "specialMassSighting")}
+        </p>
       )}
       {spinnerLabel && game.phase !== "question" && (
         <p style={{ color: "var(--accent-primary)", marginBottom: "0.25rem" }}>Spinner: {spinnerLabel}</p>
@@ -210,29 +227,56 @@ export default function Game() {
             <p style={{ color: "var(--accent-secondary)", marginBottom: "0.5rem" }}>{t("waitingPolling")}</p>
           )}
           {(game.phase === "lobby" || game.phase === "movement" || game.phase === "end_turn") && isMyTurn && (
-            <button
-              data-testid="game-roll-dice"
-              onClick={() => onAction("move")}
-              disabled={!!loading}
-              style={{ ...buttonBase, marginRight: "0.5rem", background: "var(--accent-primary)", color: "var(--bg-main)" }}
-            >
-              {loading === "move" ? "…" : t("rollDiceMove")}
-            </button>
+            <>
+              <button
+                data-testid="game-roll-dice"
+                onClick={() => onAction("move")}
+                disabled={!!loading}
+                style={{ ...buttonBase, marginRight: "0.5rem", background: "var(--accent-primary)", color: "var(--bg-main)" }}
+              >
+                {loading === "move" ? "…" : t("rollDiceMove")}
+              </button>
+              {canUseSkill && (
+                <button
+                  onClick={() => onAction("use_skill")}
+                  disabled={!!loading}
+                  style={{ ...buttonBase, background: "var(--accent-secondary)", color: "var(--text-main)" }}
+                >
+                  {loading === "use_skill" ? "…" : t("useSkill")}
+                </button>
+              )}
+            </>
           )}
           {game.phase === "spinner" && isMyTurn && (
-            <button
-              onClick={() => onAction("spin")}
-              disabled={!!loading}
-              style={{ ...buttonBase, background: "var(--accent-primary)", color: "var(--bg-main)" }}
-            >
-              {loading === "spin" ? "…" : t("spin")}
-            </button>
+            <>
+              <button
+                onClick={() => onAction("spin")}
+                disabled={!!loading}
+                style={{ ...buttonBase, marginRight: "0.5rem", background: "var(--accent-primary)", color: "var(--bg-main)" }}
+              >
+                {loading === "spin" ? "…" : t("spin")}
+              </button>
+              {canUseSkill && (
+                <button
+                  onClick={() => onAction("use_skill")}
+                  disabled={!!loading}
+                  style={{ ...buttonBase, background: "var(--accent-secondary)", color: "var(--text-main)" }}
+                >
+                  {loading === "use_skill" ? "…" : t("useSkill")}
+                </button>
+              )}
+            </>
           )}
         </section>
       )}
 
       {game.phase === "question" && question && isMyTurn && (
         <section style={{ marginTop: "1.5rem", padding: "1.25rem", border: "1px solid var(--accent-secondary)", borderRadius: "var(--radius)", background: "rgba(0, 255, 170, 0.06)" }}>
+          {!question.is_skeptic && (game.turn_state?.disclosure_question_index ?? 0) >= 0 && (
+            <p style={{ color: "var(--accent-secondary)", marginBottom: "0.5rem", fontSize: "0.9rem" }}>
+              {t("questionXofY").replace("%1", String((game.turn_state?.disclosure_question_index ?? 0) + 1)).replace("%2", "3")}
+            </p>
+          )}
           {question.is_skeptic && (
             <p style={{ color: "var(--danger)", marginBottom: "0.5rem", fontWeight: 600 }}>
               {question.obstacle_type === "debunker" ? t("debunkerChallenge") : t("skepticChallenge")}

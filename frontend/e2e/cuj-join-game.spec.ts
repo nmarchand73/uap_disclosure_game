@@ -1,5 +1,6 @@
 /**
  * CUJ 2: Join an existing game.
+ * Doc: docs/critical-user-journeys.md
  * User: Second player with a game ID from the host.
  * Goal: Join the game so I can play with others.
  * MOTs: Join succeeds; redirect to /game/:id; game screen loaded.
@@ -7,7 +8,7 @@
  */
 import { test, expect } from "@playwright/test";
 
-test.describe("CUJ: Join existing game", () => {
+test.describe("CUJ: Join existing game", { tag: "@cuj" }, () => {
   test("player can join with a game ID and see the game screen", async ({ page }) => {
     await page.goto("/");
     await page.getByTestId("lobby-new-game").click();
@@ -22,9 +23,9 @@ test.describe("CUJ: Join existing game", () => {
     await expect(page.getByTestId("lobby-join")).toBeEnabled();
     await page.getByTestId("lobby-join").click();
 
+    // MOT: redirect and game screen (no load failed)
     await expect(page).toHaveURL(new RegExp(`/game/${gameId}`), { timeout: 15000 });
     await expect(page.getByTestId("game-disclosure-path")).toBeVisible();
-    const alert = page.getByTestId("game-error");
-    await expect(alert).not.toBeVisible();
+    await expect(page.getByTestId("game-error")).not.toBeVisible();
   });
 });

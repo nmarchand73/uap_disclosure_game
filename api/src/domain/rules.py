@@ -54,3 +54,21 @@ def has_full_disclosure(path: DisclosurePath) -> bool:
         and path.military >= 3
         and path.scientific >= 3
     )
+
+
+def coop_shared_path(players: list) -> dict[str, int]:
+    """GDD 6.2: sum tokens across all players for cooperative mode."""
+    gov = mil = sci = 0
+    for p in players:
+        path = getattr(p, "disclosure_path", None)
+        if path:
+            gov += getattr(path, "government", 0) or 0
+            mil += getattr(path, "military", 0) or 0
+            sci += getattr(path, "scientific", 0) or 0
+    return {"government": gov, "military": mil, "scientific": sci}
+
+
+def has_coop_win(players: list) -> bool:
+    """True if team has 3+ tokens per authority (coop win)."""
+    sp = coop_shared_path(players)
+    return sp["government"] >= 3 and sp["military"] >= 3 and sp["scientific"] >= 3
